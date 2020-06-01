@@ -5,27 +5,14 @@ var CLOUD_HEIGHT = 270;
 var CLOUD_X = 100;
 var CLOUD_Y = 10;
 var BAR_GAP = 50;
-var FONT_GAP = 10;
 var BAR_WIDTH = 40;
 var BAR_Y = 90;
 var NAMES_Y = 260;
-var BAR_HEIGHT = 150;
+var MAX_BAR_HEIGHT = 150;
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
-};
-
-var getMaxElement = function (arr) {
-  var maxElement = arr[0];
-
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i] > maxElement) {
-      maxElement = arr[i];
-    }
-  }
-
-  return maxElement;
 };
 
 window.renderStatistics = function (ctx, players, times) {
@@ -37,17 +24,18 @@ window.renderStatistics = function (ctx, players, times) {
   ctx.fillText('Ура вы победили!', 130, 40);
   ctx.fillText('Список результатов:', 130, 60);
 
-  var maxTime = getMaxElement(times);
+  var maxTime = Math.max.apply(null, times);
 
   for (var i = 0; i < players.length; i++) {
-    if (players[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    } else {
-      ctx.fillStyle = 'hsl(250, ' + Math.round(255 * Math.random()) + '% , 50%)';
-    }
-    ctx.fillRect(CLOUD_X + BAR_GAP + (BAR_WIDTH + BAR_GAP) * i, BAR_Y + (BAR_HEIGHT - (BAR_HEIGHT * times[i]) / maxTime), BAR_WIDTH, (BAR_HEIGHT * times[i]) / maxTime);
+    var font_gap = 10;
+    var columnHeight = (MAX_BAR_HEIGHT * times[i]) / maxTime;
+    var columnX = CLOUD_X + BAR_GAP + (BAR_WIDTH + BAR_GAP) * i;
+    var columnY = BAR_Y + (MAX_BAR_HEIGHT - columnHeight);
+
+    ctx.fillStyle = players[i] === 'Вы' ? 'rgba(255, 0, 0, 1)' : 'hsl(250, ' + Math.round(255 * Math.random()) + '% , 50%)';
+    ctx.fillRect(columnX, columnY, BAR_WIDTH, columnHeight);
     ctx.fillStyle = '#000';
-    ctx.fillText(Math.round(times[i]), CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, BAR_Y + (BAR_HEIGHT - (BAR_HEIGHT * times[i]) / maxTime) - FONT_GAP);
+    ctx.fillText(Math.round(times[i]), CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, BAR_Y + MAX_BAR_HEIGHT - columnHeight - font_gap);
     ctx.fillText(players[i], CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, NAMES_Y);
   }
 };
