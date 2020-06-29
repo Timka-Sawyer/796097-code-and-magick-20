@@ -11,7 +11,6 @@ var similarListElement = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 var wizards = [];
 
-document.querySelector('.setup').classList.remove('hidden');
 
 for (var i = 0; i < WIZARDS_COUNT; i++) {
   wizards.push({
@@ -48,7 +47,6 @@ for (i = 0; i < wizards.length; i++) {
 
 similarListElement.appendChild(fragment);
 document.querySelector('.setup-similar').classList.remove('hidden');
-
 
 var setupOpen = document.querySelector('.setup-open');
 var setup = document.querySelector('.setup');
